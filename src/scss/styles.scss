@@ -1,0 +1,91 @@
+/*@font-face{
+    font-family: "Avant";
+    src: url('../font/avantgd_0-webfont.ttf') format('truetype');
+}*/
+
+html {
+    background: url("../images/bg.png") no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+#preloader {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+#preloader .pr-txt {
+    position: absolute;
+    font-size: 26px;
+    left: 30px;
+    top: 40px;
+    color: #BA890B;
+}
+
+#preloader .pr-bottle {
+    position: absolute;
+    width: 40px;
+    height: 151px;
+    left: -17px;
+    top: -81px;
+    overflow: hidden;
+}
+
+#message-pop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($color: #000000, $alpha: .2);
+    display: none;
+    .pop-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .pop-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .pop-content {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+            max-height: 100vh;
+            background: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            border-radius: 10px;
+            box-shadow: 0 0 10px 0 #555;
+            overflow: hidden;
+            font-size: 1.5em;
+            .pop-header {
+                font-size: 2.3em;
+                padding: 10px;
+                background: #008d41;
+                color: #fff;
+                text-align: center;
+            }
+            .pop-body {
+                padding: 15px;
+            }
+            .pop-footer {
+                padding: 10px;
+            }
+        }
+    }
+}

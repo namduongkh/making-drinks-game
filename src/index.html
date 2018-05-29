@@ -7,10 +7,10 @@
     <meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0" />
     <link rel="stylesheet" href="css/plugin.css" />
     <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/jquery-ui.css">
-    <script type="text/javascript" src="js/jquery.1.11.0.min.js"></script>
-    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.1.11.0.min.js"></script>
+    <script src="js/libs/jquery-ui.js"></script>
 </head>
 
 <body onLoad="init()">
@@ -20,43 +20,49 @@
         <span class="pr-bottle-grey pr-bottle"><img src="images/bottle_grey.png"></span>
     </div>
     <div id="canvasHolder"></div>
-</body>
 
-<script>
-    var isAllowWin = true;
+    <script>
+        var isAllowWin = true;
 
-    function connectToWifi() {
-        u = 'http://www.suntorypepsico.vn/vi/product/tropicana-frutz';
-        Swf_Popup(u);
-    }
+        function connectToWifi() {
+            u = 'http://www.suntorypepsico.vn/vi/product/tropicana-frutz';
+            Swf_Popup(u);
+        }
 
-    function Swf_Popup(u) {
-        $('dialog-message').show();
-        $(function() {
-            $("#dialog-message").dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $(this).dialog("close");
-                        window.location = u;
+        function Swf_Popup(u) {
+            $('dialog-message').show();
+            $(function() {
+                $("#dialog-message").dialog({
+                    modal: true,
+                    buttons: {
+                        Ok: function() {
+                            $(this).dialog("close");
+                            window.location = u;
+                        }
                     }
-                }
+                });
             });
-        });
-    }
-</script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script> -->
-<script src="js/pixi.dev.js"></script>
-<script src="js/TweenMax.js"></script>
-<script src="js/trace.js"></script>
-<script src="js/pixi.prototype.js"></script>
+        }
+    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script> -->
+    <script src="js/pixi.dev.js"></script>
+    <script src="js/TweenMax.js"></script>
+    <script src="js/trace.js"></script>
+    <script src="js/pixi.prototype.js"></script>
 
-<script src="js/common.js"></script>
-<script src="js/main.js"></script>
-<div id="dialog-message" title="S-wifi" style="display: none;">
-    <p>
-        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span> Bạn đã kết nối internet thành công!
-    </p>
-</div>
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/scene/scene0.js"></script>
+    <script src="js/scene/scene1.js"></script>
+    <script src="js/scene/scene2.js"></script>
+    <script src="js/scene/scene3.js"></script>
+    <!-- <script src="js/build/app.js"></script> -->
+    <div id="dialog-message" title="S-wifi" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span> Bạn đã kết nối internet thành công!
+        </p>
+    </div>
+</body>
 
 </html>

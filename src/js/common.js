@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     hidePreloader(0, 0, false);
     showPreloader(0, .5);
-
+    CommonJS.addPopupToShowMessage();
 });
 
 var globalVar_myCode = "";
@@ -28,7 +28,7 @@ function hidePreloader(delay, dur, remove) {
     TweenMax.to($('#preloader'), dur, {
         delay: delay,
         rotation: rota,
-        y: sh,
+        y: window.innerHeight,
         ease: Back.easeIn,
         onComplete: function() {
             if (remove) $('#preloader').remove();
@@ -50,3 +50,50 @@ function getCodeFromBackend() {
 function connectToWifi(){
     trace("connectToWifi");
 }*/
+
+
+
+var CommonJS = (function() {
+    return {
+        addPopupToShowMessage: function() {
+            $('body').append(`
+            <div id="message-pop">
+                <div class="pop-wrapper">
+                    <div class="pop-layer"></div>
+                    <div class="pop-content">
+                        <div class="pop-header">
+                            
+                        </div>
+                        <div class="pop-body">
+                            
+                        </div>
+                        <!--<div class="pop-footer">
+            
+                        </div>-->
+                    </div>
+                </div>
+            <div>
+            `);
+            var popLayer = $('#message-pop .pop-layer');
+            popLayer.on('click', function() {
+                CommonJS.closeMessagePopup();
+            });
+            $(document).keyup(function(e) {
+                if (e.keyCode === 27) CommonJS.closeMessagePopup(); // esc
+            });
+        },
+        showMessagePopup: function(header, body, footer) {
+            var popup = $('#message-pop');
+            var popHeader = $('#message-pop .pop-header');
+            var popBody = $('#message-pop .pop-body');
+            var popFooter = $('#message-pop .pop-footer');
+            popHeader.html(header);
+            popBody.html(body);
+            popFooter.html(footer);
+            popup.fadeIn(200);
+        },
+        closeMessagePopup: function() {
+            $('#message-pop').fadeOut(200);
+        }
+    };
+})();
