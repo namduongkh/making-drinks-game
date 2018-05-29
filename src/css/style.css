@@ -1,0 +1,41 @@
+
+/*@font-face{
+    font-family: "Avant";
+    src: url('../font/avantgd_0-webfont.ttf') format('truetype');
+}*/
+
+html{
+	background: url("../images/bg.png") no-repeat center center;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+}
+
+body{
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+}
+
+#preloader{
+	position: fixed;
+	left: 50%;
+	top: 50%;
+}
+	#preloader .pr-txt{
+		position: absolute;
+		font-size: 26px;
+		left: 30px;
+		top: 40px;
+		color: #BA890B;
+	}
+
+	#preloader .pr-bottle{
+		position: absolute;
+		width: 40px;
+		height: 151px;
+		left: -17px;
+		top: -81px;
+		overflow: hidden;
+	}

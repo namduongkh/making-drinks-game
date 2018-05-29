@@ -1,0 +1,144 @@
+/* 
+ CSS of plugins:
+ 	- ColorBox
+	- Tiny Scrollbar
+	- CUSTOM ELEMENTS
+ */ 
+ 
+ 
+ 
+ 
+/*
+	Trace debug
+ */
+#log{ z-index:999999; width:80%; height:100px; font-family: 'Courier'; font-size:11px; background-color:rgba(0,0,0,.7); color:#FFF; overflow-y:auto; position:fixed; bottom:0; left:10%; }
+
+ 
+ 
+ 
+ 
+ 
+/*
+    ColorBox Core Style:
+*/
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none;}
+.cboxIframe{width:100%; height:100%; display:block; border:0;}
+#colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box;}
+
+#cboxOverlay{}
+#colorbox{}
+    #cboxTopLeft,
+    #cboxTopRight,
+    #cboxBottomLeft,
+    #cboxBottomRight,
+    #cboxMiddleLeft,
+    #cboxMiddleRight,
+    #cboxTopCenter,
+    #cboxBottomCenter{ display: none }
+    #cboxContent{background:#fff; overflow:hidden;}
+        .cboxIframe{background:#fff;}
+        #cboxError{padding:50px; border:1px solid #ccc;}
+        #cboxLoadedContent{margin-bottom:28px;}
+        #cboxTitle{position:absolute; bottom:4px; left:0; text-align:center; width:100%; color:#949494;}
+        #cboxCurrent{position:absolute; bottom:4px; left:58px; color:#949494;}
+        #cboxSlideshow{position:absolute; bottom:4px; right:30px; color:#0092ef;}
+        #cboxPrevious{position:absolute; bottom:0; left:0; width:25px; height:25px; text-indent:-9999px;}
+        #cboxPrevious:hover{}
+        #cboxNext{position:absolute; bottom:0; left:27px; width:25px; height:25px; text-indent:-9999px;}
+        #cboxNext:hover{}
+        #cboxLoadingOverlay{}
+        #cboxLoadingGraphic{}
+        #cboxClose{position:absolute; bottom:0; right:0; width:25px; height:25px; text-indent:-9999px;}
+        #cboxClose:hover{}
+/*
+  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
+  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
+*/
+.cboxIE #cboxTopLeft,
+.cboxIE #cboxTopCenter,
+.cboxIE #cboxTopRight,
+.cboxIE #cboxBottomLeft,
+.cboxIE #cboxBottomCenter,
+.cboxIE #cboxBottomRight,
+.cboxIE #cboxMiddleLeft,
+.cboxIE #cboxMiddleRight {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+}
+/*  The following provides PNG transparency support for IE6 */
+.cboxIE6 #cboxTopLeft{}
+.cboxIE6 #cboxTopCenter{}
+.cboxIE6 #cboxTopRight{}
+.cboxIE6 #cboxBottomLeft{}
+.cboxIE6 #cboxBottomCenter{}
+.cboxIE6 #cboxBottomRight{}
+.cboxIE6 #cboxMiddleLeft{}
+.cboxIE6 #cboxMiddleRight{}
+.cboxIE6 #cboxTopLeft,
+.cboxIE6 #cboxTopCenter,
+.cboxIE6 #cboxTopRight,
+.cboxIE6 #cboxBottomLeft,
+.cboxIE6 #cboxBottomCenter,
+.cboxIE6 #cboxBottomRight,
+.cboxIE6 #cboxMiddleLeft,
+.cboxIE6 #cboxMiddleRight {
+    _behavior: expression(this.src = this.src ? this.src : this.currentStyle.backgroundImage.split('"')[1], this.style.background = "none", this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=" + this.src + ", sizingMethod='scale')");
+}
+
+
+
+
+
+
+
+
+
+/*
+ 	Tiny Scrollbar
+ */
+.scrolled { width: 400px; height:200px;  }
+.scrolled .g-viewport { height: 100%; overflow: hidden; position: relative; }
+.scrolled .g-overview { list-style: none; position: absolute; left: 0; top: 0; padding:0 10px 10px 0; }
+.scrolled .g-thumb .end,
+.scrolled .g-thumb { background-color: #333; }
+.scrolled .g-scrollbar { position: relative; float: right; width: 8px; }
+.scrolled .g-track { background-color: #ccc; height: 100%; width:8px; position: relative; padding: 0 1px; }
+.scrolled .g-thumb { height: 20px; width: 8px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
+.scrolled .g-thumb .end { overflow: hidden; height: 5px; width: 8px; }
+.scrolled .g-disable{ display: none; }
+.g-noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+
+
+
+
+
+
+
+
+
+
+/*
+	jAlert
+ */
+#popup_container {	font-family: Arial, sans-serif;	font-size: 12px; min-width: 300px; max-width: 600px; background: #efefef; color: #000; box-shadow:0px 0px 30px rgba(0,0,0,.5); -webkit-box-shadow:0px 0px 30px rgba(0,0,0,.5); -moz-box-shadow:0px 0px 30px rgba(0,0,0,.5) }
+#popup_title { display:none; font-size: 14px; font-weight: bold; text-align: center; line-height: 1.75em; color: #666; background: #CCC url(images/title.gif) top repeat-x; border: solid 1px #FFF; border-bottom: solid 1px #999; cursor: default; padding: 0em; margin: 0em;} /* Disable title */
+#popup_content { padding: 10px; margin: 0; }
+#popup_content.alert {}
+#popup_content.confirm {}
+#popup_content.prompt {}
+#popup_message { text-align:center; padding:10px 0 20px}
+#popup_prompt {	margin:0;}
+#popup_panel {	text-align: center;	margin:0;}
+#popup_panel input{ font-size:12px; text-transform:uppercase; padding:6px 20px; border:none; background:#888; color:#fff}
+#popup_overlay{ background:#000; opacity:0.3;}
+
+/**** CUSTOM ELEMENTS ****/
+.checkbox, .radio {width: 25px; height: 26px; padding: 0 5px 0 0; background: url(../images/checkbox.png) no-repeat; display: block; clear: left; float: left;}						
+.radio {background: url(../images/radio.png) no-repeat; position: relative; top: -2px; height: 24px;}
