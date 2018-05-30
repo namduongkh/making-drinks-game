@@ -67,8 +67,6 @@ function animationIn() {
     setTimeout(() => {
         gotoScene(Scene3JS);
     }, 500);
-    // Scene3JS.start();
-    // Scene0JS.start();
 }
 
 function createBubbleBG() {

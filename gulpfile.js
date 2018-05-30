@@ -5,13 +5,23 @@ const uglify = require('gulp-uglify');
 const pump = require('pump');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
+const cleanCSS = require('gulp-clean-css');
 
 gulp.task('style', function() {
-    return gulp.src('./src/scss/*.scss')
+    gulp.src(['./src/css/*.css'])
+        .pipe(concat('vendor.css'))
+        .pipe(autoprefixer())
+        .pipe(cleanCSS({ compatibility: 'ie8' }))
+        .pipe(gulp.dest('./src/build'));
+});
+
+gulp.task('sass', function() {
+    gulp.src(['./src/scss/*.scss'])
         .pipe(sass().on('error', sass.logError))
         .pipe(concat('styles.css'))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('./src/css'));
+        .pipe(cleanCSS({ compatibility: 'ie8' }))
+        .pipe(gulp.dest('./src/build'));
 });
 
 var jsEntries = [
@@ -32,6 +42,9 @@ gulp.task('js', function(cb) {
         console.log('min');
         task.push(uglify());
     }
-    task.push(gulp.dest('./src/js/build'));
+    task.push(gulp.dest('./src/build'));
     pump(task, cb);
 });
+
+gulp.task('default', ['sass', 'style', 'js', 'watch']);
+gulp.task('build', ['sass', 'style', 'js', 'watch']);

@@ -2,7 +2,7 @@ var MATERIAL_INPUT = {
     "apple": {
         id: "apple",
         name: "Táo",
-        quantity: 1,
+        quantity: 5,
         url: "images/apple.png",
         broken_id: "apple_broken",
         broken_url: "images/apple_broken.png",
@@ -18,7 +18,7 @@ var MATERIAL_INPUT = {
     "sakura": {
         id: "sakura",
         name: "Anh đào",
-        quantity: 1,
+        quantity: 5,
         url: "images/sakura.png",
         broken_id: "peanapple_broken",
         broken_url: "images/mangcau_broken.png",
@@ -26,7 +26,7 @@ var MATERIAL_INPUT = {
     "lemon": {
         id: "lemon",
         name: "Chanh",
-        quantity: 1,
+        quantity: 2,
         url: "images/lemon.png",
         broken_id: "lemon_broken",
         broken_url: "images/lemon_broken.png",
@@ -34,7 +34,7 @@ var MATERIAL_INPUT = {
 };
 
 var CONFIG = {
-    difficult_level: 1,
+    difficult_level: 5,
     max_difficult_level: 5,
     appear_circle: 6,
     circle_scale_seconds: 10,

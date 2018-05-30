@@ -6730,7 +6730,7 @@ var MATERIAL_INPUT = {
     "apple": {
         id: "apple",
         name: "Táo",
-        quantity: 1,
+        quantity: 5,
         url: "images/apple.png",
         broken_id: "apple_broken",
         broken_url: "images/apple_broken.png",
@@ -6746,7 +6746,7 @@ var MATERIAL_INPUT = {
     "sakura": {
         id: "sakura",
         name: "Anh đào",
-        quantity: 1,
+        quantity: 5,
         url: "images/sakura.png",
         broken_id: "peanapple_broken",
         broken_url: "images/mangcau_broken.png",
@@ -6754,7 +6754,7 @@ var MATERIAL_INPUT = {
     "lemon": {
         id: "lemon",
         name: "Chanh",
-        quantity: 1,
+        quantity: 2,
         url: "images/lemon.png",
         broken_id: "lemon_broken",
         broken_url: "images/lemon_broken.png",
@@ -6762,7 +6762,7 @@ var MATERIAL_INPUT = {
 };
 
 var CONFIG = {
-    difficult_level: 1,
+    difficult_level: 5,
     max_difficult_level: 5,
     appear_circle: 6,
     circle_scale_seconds: 10,
@@ -6881,8 +6881,6 @@ function animationIn() {
     setTimeout(() => {
         gotoScene(Scene3JS);
     }, 500);
-    // Scene3JS.start();
-    // Scene0JS.start();
 }
 
 function createBubbleBG() {
@@ -24522,13 +24520,13 @@ var Scene1JS = (function() {
             // }
         }
 
-        var beforeIndex = -1;
         // Chèn ngẫu nhiên các phần tử giới hạn vào mảng tất cả nguyên liệu
         for (var i = 1; i <= limit_input.limit_quantity; i++) {
             var randomIndex = -1;
-            while (randomIndex == beforeIndex) {
+            do {
                 randomIndex = Math.floor((Math.random() * (GAME.all_items_will_appear.array.length - CONFIG.total_item_on_circle - 1)) + (CONFIG.total_item_on_circle - 1));
-            }
+            } while (GAME.all_items_will_appear.array[randomIndex] == limit_input.id);
+            // console.log('randomIndex', randomIndex);
             GAME.all_items_will_appear.array[randomIndex] = limit_input.id;
         }
 
@@ -24875,6 +24873,7 @@ var Scene1JS = (function() {
             }
 
             if (per >= 1) {
+                GAME.is_win = true;
                 stopGame();
             }
         }
@@ -25032,8 +25031,9 @@ var Scene1JS = (function() {
         id: "s1",
         create: function() {
             trace("create 1")
-            with(GAME.Container) {
+            GAME.is_win = false;
 
+            with(GAME.Container) {
                 GAME.Scene1 = addContainer({ id: Scene1JS.id, locationX: CONFIG.sw / 2, locationY: CONFIG.sh / 2, alpha: 0 });
 
                 with(GAME.Scene1) {
@@ -25191,35 +25191,56 @@ var Scene2JS = (function() {
 
             with(GAME.Container) {
 
-                GAME.Scene2 = addContainer({ id: Scene2JS.id, visible: false });
+                GAME.Scene2 = addContainer({ id: Scene2JS.id });
                 GAME.Scene2.interactive = true;
                 GAME.Scene2.buttonMode = true;
 
                 with(GAME.Scene2) {
                     addRect("hit", CONFIG.sw, CONFIG.sh, "0xff0", 0, 0, 0);
-                    addObject({ id: "logo", texture: TEXTURES["images/logo.png"], scaleX: .5, scaleY: .5 })
-                    addObject({ id: "copy1", texture: TEXTURES["images/congratulation.png"], scaleX: .5, scaleY: .5, visible: false });
-                    addObject({ id: "copy2", texture: TEXTURES["images/win.png"], scaleX: .5, scaleY: .5, visible: false })
+                    addContainer({ id: "winContent", visible: false });
+                    addContainer({ id: "loseContent", visible: false });
+                    addObject({ id: "logo", texture: TEXTURES["images/logo.png"], scaleX: .5, scaleY: .5 });
+                    addObject({ id: "cup", texture: TEXTURES["images/tocotococup.png"], scaleX: .8, scaleY: .8 });
+
+                    with(winContent) {
+                        // addObject({ id: "copy1", texture: TEXTURES["images/congratulation.png"], scaleX: .5, scaleY: .5, visible: false });
+                        // addObject({ id: "copy2", texture: TEXTURES["images/win.png"], scaleX: .5, scaleY: .5, visible: false });
+
+                        // TODO: Sau này nên thay những dòng text bằng hình hết để responsive
+                        addText({ id: "win", text: "Bạn đã chiến thắng!", font: "bold 30px Arial", color: "#008d41" });
+                    };
+                    with(loseContent) {
+                        // TODO: Sau này nên thay những dòng text bằng hình hết để responsive
+                        addText({ id: "lose", text: "Bạn đã không giành được chiến thắng!", anchorX: 0, anchorY: 0, font: "bold 30px Arial", color: "#008d41" });
+                    }
                 }
             }
         },
         start: function() {
             var timeout;
-            GAME.Scene2.visible = true;
 
-            var txt = GAME.Scene2.copy1.addText({ id: "txt", text: "0", font: "bold 30px Arial", color: "#008d41", locationX: 75, locationY: 93 });
-            var numOfBottle = GAME.finish_cup_number;
+            if (GAME.is_win) {
+                GAME.Scene2.winContent.visible = true;
+                with(GAME.Scene2.winContent) {
+                    var numOfBottle = GAME.finish_cup_number;
 
-            if (numOfBottle < 10 && numOfBottle != 0) numOfBottle = "0" + numOfBottle;
-            txt.setText(numOfBottle);
-            if (numOfBottle > 0) txt.position.x = txt.initX - txt.width / 2;
+                    if (numOfBottle < 10 && numOfBottle != 0) numOfBottle = "0" + numOfBottle;
+                    win.setText("Bạn đã pha chế thành công " + numOfBottle + " ly Sakura Ngân Nhĩ!");
+                    if (numOfBottle > 0) win.position.x = win.initX - win.width / 2;
 
-            GAME.Scene2.copy1.visible = true;
-            GAME.Scene2.copy2.visible = false;
+                    // copy1.visible = true;
+                    // copy2.visible = false;
+                }
+            } else {
+                GAME.Scene2.loseContent.visible = true;
+                // with(GAME.Scene2.loseContent) {
+                //     addText({ id: "lose", text: "Bạn đã không giành được chiến thắng!", locationX: 0, locationY: 0, font: "bold 30px Arial", color: "#008d41" });
+                // }
+            }
 
             timeout = setTimeout(function() {
                 gotoScene(Scene3JS);
-            }, 4000);
+            }, 5000);
         },
         resize: function(sw, sh) {
             if (GAME.Scene2) {
@@ -25228,17 +25249,35 @@ var Scene2JS = (function() {
                     hit.width = sw;
                     hit.height = sh;
 
+                    // hit.position.x = -hit.width / 2;
+                    // hit.position.y = -hit.height / 2;
+
+                    // position.x = sw / 2;
+                    // position.y = sh / 2;
+
                     logo.scale.x = logo.scale.y = CONFIG.my_ratio;
                     logo.position.x = (sw - logo.width) / 2;
                     logo.position.y = 10;
 
-                    copy1.scale.x = copy1.scale.y = CONFIG.my_ratio;
-                    copy1.position.x = (sw - copy1.width) / 2;
-                    copy1.position.y = (sh - copy1.height + logo.height) / 2;
+                    cup.position.x = (sw - cup.width) / 2;
+                    cup.position.y = (sh - cup.height) / 2;
 
-                    copy2.scale.x = copy2.scale.y = CONFIG.my_ratio;
-                    copy2.position.x = (sw - copy2.width) / 2;
-                    copy2.position.y = (sh - copy2.height + logo.height) / 2;
+                    with(winContent) {
+                        //     copy1.scale.x = copy1.scale.y = CONFIG.my_ratio;
+                        //     copy1.position.x = (sw - copy1.width) / 2;
+                        //     copy1.position.y = (sh - copy1.height + logo.height) / 2;
+
+                        //     copy2.scale.x = copy2.scale.y = CONFIG.my_ratio;
+                        //     copy2.position.x = (sw - copy2.width) / 2;
+                        //     copy2.position.y = (sh - copy2.height + logo.height) / 2;
+                        win.position.x = (sw - win.width) / 2;
+                        win.position.y = (sh - win.height + cup.height) / 2;
+                    }
+
+                    with(loseContent) {
+                        lose.position.x = (sw - lose.width) / 2;
+                        lose.position.y = (sh - lose.height + cup.height) / 2;
+                    }
                 }
                 if (!Scene2JS.hasResized) {
                     Scene2JS.hasResized = true;
@@ -25283,8 +25322,9 @@ var Scene3JS = (function() {
                     }
 
                     with(navigateHolder) {
-                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -400, locationY: 0 });
-                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -250, locationY: 0 });
+                        // TODO: Sau này nên thay những dòng text bằng hình hết để responsive
+                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -360, locationY: 0 });
+                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -230, locationY: 0 });
                         addText({ id: "award", text: "Đổi quà", font: "bold 17px Arial", color: "#008d41", locationX: -100, locationY: 0 });
                     }
 

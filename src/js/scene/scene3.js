@@ -28,8 +28,9 @@ var Scene3JS = (function() {
                     }
 
                     with(navigateHolder) {
-                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -400, locationY: 0 });
-                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -250, locationY: 0 });
+                        // TODO: Sau này nên thay những dòng text bằng hình hết để responsive
+                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -360, locationY: 0 });
+                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -230, locationY: 0 });
                         addText({ id: "award", text: "Đổi quà", font: "bold 17px Arial", color: "#008d41", locationX: -100, locationY: 0 });
                     }
 

@@ -63,13 +63,13 @@ var Scene1JS = (function() {
             // }
         }
 
-        var beforeIndex = -1;
         // Chèn ngẫu nhiên các phần tử giới hạn vào mảng tất cả nguyên liệu
         for (var i = 1; i <= limit_input.limit_quantity; i++) {
             var randomIndex = -1;
-            while (randomIndex == beforeIndex) {
+            do {
                 randomIndex = Math.floor((Math.random() * (GAME.all_items_will_appear.array.length - CONFIG.total_item_on_circle - 1)) + (CONFIG.total_item_on_circle - 1));
-            }
+            } while (GAME.all_items_will_appear.array[randomIndex] == limit_input.id);
+            // console.log('randomIndex', randomIndex);
             GAME.all_items_will_appear.array[randomIndex] = limit_input.id;
         }
 
@@ -416,6 +416,7 @@ var Scene1JS = (function() {
             }
 
             if (per >= 1) {
+                GAME.is_win = true;
                 stopGame();
             }
         }
@@ -573,8 +574,9 @@ var Scene1JS = (function() {
         id: "s1",
         create: function() {
             trace("create 1")
-            with(GAME.Container) {
+            GAME.is_win = false;
 
+            with(GAME.Container) {
                 GAME.Scene1 = addContainer({ id: Scene1JS.id, locationX: CONFIG.sw / 2, locationY: CONFIG.sh / 2, alpha: 0 });
 
                 with(GAME.Scene1) {
