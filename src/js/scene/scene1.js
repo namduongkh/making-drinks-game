@@ -13,7 +13,7 @@ var Scene1JS = (function() {
         // Thay đổi texture cho các phần tử trái cây trong vòng tròn
         for (var i = 0; i < fruits.itemArr.length; i++) {
             var material_input = getMaterialInput();
-            var target = fruits.updateObject({ id: "item" + i, url: material_input.url, name: material_input.id });
+            var target = fruits.updateObject({ id: "item" + i, texture: TEXTURES[material_input.url], name: material_input.id });
             backFn(target);
         }
     }

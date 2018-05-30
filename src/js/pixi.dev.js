@@ -2028,7 +2028,7 @@
          */
         this.shader = null;
 
-        if (texture.baseTexture.hasLoaded) {
+        if (texture && texture.baseTexture && texture.baseTexture.hasLoaded) {
             this.onTextureUpdate();
         } else {
             this.onTextureUpdateBind = this.onTextureUpdate.bind(this);

@@ -47,9 +47,9 @@ PIXI.Sprite.prototype.addSprite =
 
     }
 
-PIXI.Sprite.prototype.setTexture =
-    PIXI.MovieClip.prototype.setTexture =
-    PIXI.DisplayObjectContainer.prototype.setTexture = function(id, texture, startDrag) {
+PIXI.Sprite.prototype.addTexture =
+    PIXI.MovieClip.prototype.addTexture =
+    PIXI.DisplayObjectContainer.prototype.addTexture = function(id, texture, startDrag) {
 
 
         // var texture = new PIXI.Texture.fromImage(url);
@@ -83,7 +83,6 @@ PIXI.Sprite.prototype.updateSprite =
 PIXI.Sprite.prototype.updateTexture =
     PIXI.MovieClip.prototype.updateTexture =
     PIXI.DisplayObjectContainer.prototype.updateTexture = function(id, texture) {
-
         // var texture = new PIXI.Texture.fromImage(url);
         this.sprite.setTexture(texture);
         // var target = new PIXI.Sprite(appleTexture);
@@ -122,7 +121,7 @@ PIXI.MovieClip.prototype.addObject =
         }
 
         if (typeof obj.texture != 'undefined') {
-            target.sprite = target.setTexture('bitmap', obj.texture);
+            target.sprite = target.addTexture('bitmap', obj.texture);
         }
 
         target.setProperties(obj);
@@ -138,13 +137,12 @@ PIXI.MovieClip.prototype.updateObject =
 
         // target.id = obj.id;
         // this.addChild(target)
-        // console.log("this", this);
-        if (obj.url != "") {
+        if (typeof obj.url != 'undefined') {
             target.updateSprite(obj.id, obj.url);
         }
 
-        if (obj.texture) {
-            target.sprite = target.updateTexture(obj.id, obj.texture);
+        if (typeof obj.texture != 'undefined') {
+            target.updateTexture(obj.id, obj.texture);
         }
 
         target.setProperties(obj);

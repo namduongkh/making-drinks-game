@@ -6765,7 +6765,7 @@ var CONFIG = {
     max_difficult_level: 5,
     appear_circle: 6,
     circle_scale_seconds: 10,
-    total_seconds: 30,
+    total_seconds: 60,
     my_ratio: 1,
     total_item_on_circle: 12,
     multiplier_with_difficult: 1.5,
@@ -9099,7 +9099,7 @@ function fontLoaded(font, callback) {
          */
         this.shader = null;
 
-        if (texture.baseTexture.hasLoaded) {
+        if (texture && texture.baseTexture && texture.baseTexture.hasLoaded) {
             this.onTextureUpdate();
         } else {
             this.onTextureUpdateBind = this.onTextureUpdate.bind(this);
@@ -23984,9 +23984,9 @@ PIXI.Sprite.prototype.addSprite =
 
     }
 
-PIXI.Sprite.prototype.setTexture =
-    PIXI.MovieClip.prototype.setTexture =
-    PIXI.DisplayObjectContainer.prototype.setTexture = function(id, texture, startDrag) {
+PIXI.Sprite.prototype.addTexture =
+    PIXI.MovieClip.prototype.addTexture =
+    PIXI.DisplayObjectContainer.prototype.addTexture = function(id, texture, startDrag) {
 
 
         // var texture = new PIXI.Texture.fromImage(url);
@@ -24020,7 +24020,6 @@ PIXI.Sprite.prototype.updateSprite =
 PIXI.Sprite.prototype.updateTexture =
     PIXI.MovieClip.prototype.updateTexture =
     PIXI.DisplayObjectContainer.prototype.updateTexture = function(id, texture) {
-
         // var texture = new PIXI.Texture.fromImage(url);
         this.sprite.setTexture(texture);
         // var target = new PIXI.Sprite(appleTexture);
@@ -24059,7 +24058,7 @@ PIXI.MovieClip.prototype.addObject =
         }
 
         if (typeof obj.texture != 'undefined') {
-            target.sprite = target.setTexture('bitmap', obj.texture);
+            target.sprite = target.addTexture('bitmap', obj.texture);
         }
 
         target.setProperties(obj);
@@ -24075,13 +24074,12 @@ PIXI.MovieClip.prototype.updateObject =
 
         // target.id = obj.id;
         // this.addChild(target)
-        // console.log("this", this);
-        if (obj.url != "") {
+        if (typeof obj.url != 'undefined') {
             target.updateSprite(obj.id, obj.url);
         }
 
-        if (obj.texture) {
-            target.sprite = target.updateTexture(obj.id, obj.texture);
+        if (typeof obj.texture != 'undefined') {
+            target.updateTexture(obj.id, obj.texture);
         }
 
         target.setProperties(obj);
@@ -24412,7 +24410,16 @@ var Scene0JS = (function() {
             }
         },
         start: function() {
+            var timeout;
 
+            GAME.Scene0.mousedown = GAME.Scene0.touchstart = function(data) {
+                clearTimeout(timeout);
+                gotoScene(Scene1JS);
+            }
+
+            timeout = setTimeout(function() {
+                gotoScene(Scene1JS);
+            }, 3000)
         }
     };
 })();
@@ -24431,7 +24438,7 @@ var Scene1JS = (function() {
         // Thay đổi texture cho các phần tử trái cây trong vòng tròn
         for (var i = 0; i < fruits.itemArr.length; i++) {
             var material_input = getMaterialInput();
-            var target = fruits.updateObject({ id: "item" + i, url: material_input.url, name: material_input.id });
+            var target = fruits.updateObject({ id: "item" + i, texture: TEXTURES[material_input.url], name: material_input.id });
             backFn(target);
         }
     }

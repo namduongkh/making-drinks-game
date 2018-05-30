@@ -40,7 +40,16 @@ var Scene0JS = (function() {
             }
         },
         start: function() {
+            var timeout;
 
+            GAME.Scene0.mousedown = GAME.Scene0.touchstart = function(data) {
+                clearTimeout(timeout);
+                gotoScene(Scene1JS);
+            }
+
+            timeout = setTimeout(function() {
+                gotoScene(Scene1JS);
+            }, 3000)
         }
     };
 })();
