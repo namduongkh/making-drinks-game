@@ -220,6 +220,14 @@ PIXI.MovieClip.prototype.setProperties =
         if (obj.height != undefined) {
             target.height = obj.height;
         }
+
+        if (obj.anchorX != undefined) {
+            target.anchor.x = obj.anchorX;
+        }
+
+        if (obj.anchorY != undefined) {
+            target.anchor.y = obj.anchorY;
+        }
     }
 
 PIXI.Sprite.prototype.addCircle =

@@ -15,6 +15,7 @@ var Scene3JS = (function() {
                     addObject({ id: "bg", texture: TEXTURES["images/lastScence_bg.png"], scaleX: .5, scaleY: .5 })
 
                     addContainer({ id: "frutHolder" });
+                    addContainer({ id: "navigateHolder" });
                     addObject({ id: "lastScence", texture: TEXTURES["images/lastScence.png"], scaleX: .5, scaleY: .5 })
 
                     with(frutHolder) {
@@ -26,9 +27,15 @@ var Scene3JS = (function() {
                         addObject({ id: "f3", texture: TEXTURES["images/f3.png"], scaleX: .5, scaleY: .5, locationX: -115, locationY: 225, x: -10, y: -35 });
                     }
 
+                    with(navigateHolder) {
+                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -400, locationY: 0 });
+                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -250, locationY: 0 });
+                        addText({ id: "award", text: "Đổi quà", font: "bold 17px Arial", color: "#008d41", locationX: -100, locationY: 0 });
+                    }
+
                     addObject({ id: "logo", texture: TEXTURES["images/logo.png"], scaleX: .5, scaleY: .5 })
                     addObject({ id: "goNowBtn", texture: TEXTURES["images/goNowBtn.png"], scaleX: .5, scaleY: .5 })
-                    addObject({ id: "connectWifiBtn", texture: TEXTURES["images/connectWifiBtn.png"], scaleX: .5, scaleY: .5 })
+                        // addObject({ id: "connectWifiBtn", texture: TEXTURES["images/connectWifiBtn.png"], scaleX: .5, scaleY: .5 })
 
                     addObject({ id: "myCodeHolder", texture: TEXTURES["images/codeBG.png"], scaleX: .6, scaleY: .6, visible: false })
                     myCodeHolder.addText({ id: "code", text: "ABC", font: "bold 17px Arial", color: "#008d41", locationX: 65, locationY: 12 });
@@ -50,22 +57,21 @@ var Scene3JS = (function() {
 
                 goNowBtn.mouseup = goNowBtn.mouseupoutside = goNowBtn.touchend = goNowBtn.touchendoutside = function(data) {
                     this.alpha = 1;
-                    // connectToWifi();
-                    location.reload();
-                }
-
-                connectWifiBtn.interactive = true;
-                connectWifiBtn.buttonMode = true;
-                connectWifiBtn.mousedown = connectWifiBtn.touchstart = function(data) {
-                    trace("ket noi wifi");
-                    // connectToWifi();
-                    this.alpha = .5;
-                }
-
-                connectWifiBtn.mouseup = connectWifiBtn.mouseupoutside = connectWifiBtn.touchend = connectWifiBtn.touchendoutside = function(data) {
-                    this.alpha = 1;
                     gotoScene(Scene0JS);
                 }
+
+                // connectWifiBtn.interactive = true;
+                // connectWifiBtn.buttonMode = true;
+                // connectWifiBtn.mousedown = connectWifiBtn.touchstart = function(data) {
+                //     trace("ket noi wifi");
+                //     // connectToWifi();
+                //     this.alpha = .5;
+                // }
+
+                // connectWifiBtn.mouseup = connectWifiBtn.mouseupoutside = connectWifiBtn.touchend = connectWifiBtn.touchendoutside = function(data) {
+                //     this.alpha = 1;
+                //     gotoScene(Scene0JS);
+                // }
 
                 TweenMax.to(lastScence, 1.5, {
                     delay: Math.random(),
@@ -86,11 +92,30 @@ var Scene3JS = (function() {
                     TweenMax.to(f3, 1.5, { delay: Math.random(), rotation: rota, y: f3.initY + 8, yoyo: true, repeat: -1, ease: Sine.easeInOut });
                 }
 
-
-                if (GAME.is_win) {
-                    myCodeHolder.visible = true;
-                    myCodeHolder.code.setText(CONFIG.my_code);
+                with(navigateHolder) {
+                    help.interactive = login.interactive = award.interactive = true;
+                    help.buttonMode = login.buttonMode = award.buttonMode = true;
+                    help.mousedown = help.touchend = login.mousedown = login.touchend = award.mousedown = award.touchend = function() {
+                        this.alpha = .5;
+                    }
+                    help.mouseup = help.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Hướng dẫn", "Nội dung hướng dẫn ở đây!");
+                    }
+                    login.mouseup = login.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Đăng nhập", "Nội dung đăng nhập ở đây!");
+                    }
+                    award.mouseup = award.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Đổi quà", "Nội dung đổi quà ở đây!");
+                    }
                 }
+
+                // if (GAME.is_win) {
+                //     myCodeHolder.visible = true;
+                //     myCodeHolder.code.setText(CONFIG.my_code);
+                // }
             }
         },
         resize: function(sw, sh) {
@@ -114,13 +139,18 @@ var Scene3JS = (function() {
                     goNowBtn.position.x = (sw - goNowBtn.width) / 2;
                     goNowBtn.position.y = sh - 95 * CONFIG.my_ratio;
 
-                    connectWifiBtn.scale.y = connectWifiBtn.scale.x = CONFIG.my_ratio;
-                    connectWifiBtn.position.x = (sw - connectWifiBtn.width) / 2;
-                    connectWifiBtn.position.y = sh - 47 * CONFIG.my_ratio;
+                    // connectWifiBtn.scale.y = connectWifiBtn.scale.x = CONFIG.my_ratio;
+                    // connectWifiBtn.position.x = (sw - connectWifiBtn.width) / 2;
+                    // connectWifiBtn.position.y = sh - 47 * CONFIG.my_ratio;
 
                     myCodeHolder.scale.y = myCodeHolder.scale.x = CONFIG.my_ratio;
                     myCodeHolder.position.x = (sw - 160 * CONFIG.my_ratio) / 2;
                     myCodeHolder.position.y = sh - 160 * CONFIG.my_ratio;
+
+                    // Vùng chứa các nút để bật popup
+                    navigateHolder.position.x = sw - 20;
+                    navigateHolder.position.y = 20;
+
                 }
             }
         }

@@ -422,13 +422,13 @@ var Scene1JS = (function() {
     }
 
     function setProgressBar(per, dur) {
-        var progress_bar = GAME.Scene1.progressHoder.progress_bar;
+        // var progress_bar = GAME.Scene1.progressHoder.progress_bar;
 
-        if (per < 0) per = 0;
-        if (per > 1) per = 1;
+        // if (per < 0) per = 0;
+        // if (per > 1) per = 1;
 
-        if (dur == undefined) dur = .3;
-        TweenMax.to(progress_bar.scale, dur, { x: per, ease: Sine.easeOut });
+        // if (dur == undefined) dur = .3;
+        // TweenMax.to(progress_bar.scale, dur, { x: per, ease: Sine.easeOut });
     }
 
     /**
@@ -600,10 +600,10 @@ var Scene1JS = (function() {
                     }
 
                     with(progressHoder) {
-                        addObject({ id: "progress_bg", texture: TEXTURES["images/progress_bg.png"], scaleX: .5, scaleY: .5 });
-                        addObject({ id: "progress_bar", texture: TEXTURES["images/progress_bar.png"], scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
-                        addObject({ id: "num", texture: TEXTURES["images/numOfFrut.png"], scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
-                        addObject({ id: "bottle", texture: TEXTURES["images/bottle_double.png"], scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
+                        // addObject({ id: "progress_bg", texture: TEXTURES["images/progress_bg.png"], scaleX: .5, scaleY: .5 });
+                        // addObject({ id: "progress_bar", texture: TEXTURES["images/progress_bar.png"], scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
+                        // addObject({ id: "num", texture: TEXTURES["images/numOfFrut.png"], scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
+                        // addObject({ id: "bottle", texture: TEXTURES["images/bottle_double.png"], scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
                     }
 
 
@@ -642,11 +642,11 @@ var Scene1JS = (function() {
                         var collectObject = {};
                         var index = 0;
                         for (var i in GAME.material_collected) {
-                            var rootX = (60 * index);
-                            var rootY = 6;
-                            collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "bold 18px Arial", color: "#008d41", locationX: rootX + 27, locationY: rootY });
-                            addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "bold 18px Arial", color: "#008d41", locationX: rootX + 40, locationY: rootY });
-                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], width: 25, height: 25, locationX: rootX });
+                            var rootX = (60 * (index - 1) - 30);
+                            var rootY = 3;
+                            collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "18px Arial", color: "#008d41", locationX: rootX + 25, locationY: rootY, anchorX: .5, anchorY: .5 });
+                            addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "18px Arial", color: "#008d41", locationX: rootX + 38, locationY: rootY, anchorX: .5, anchorY: .5 });
+                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], width: 25, height: 25, locationX: rootX, regPerX: .5, regPerY: .5 });
                             index++;
                         }
 
@@ -671,14 +671,15 @@ var Scene1JS = (function() {
 
                     progressHoder.position.y = sh / 2 - 60;
 
-                    collectHolder.position.x = -sw / 2 + 20;
+                    collectHolder.position.x = 0;
                     collectHolder.position.y = sh / 2 - 50;
                 }
             }
         },
         start: function() {
-            trace("isAllowWin = " + isAllowWin);
-            haveAPrize = isAllowWin;
+            // trace("isAllowWin = " + isAllowWin);
+            // haveAPrize = isAllowWin;
+            GAME.is_stop = false;
 
             TweenMax.to(GAME.Scene1, .5, { alpha: 1, ease: Sine.easeOut })
             setProgressBar(0, 0);

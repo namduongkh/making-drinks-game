@@ -37,10 +37,11 @@ var Scene2JS = (function() {
 
             timeout = setTimeout(function() {
                 gotoScene(Scene3JS);
-            }, 3000);
+            }, 4000);
         },
         resize: function(sw, sh) {
             if (GAME.Scene2) {
+                TweenMax.to(GAME.Scene2, 0, { alpha: 0.05, ease: Sine.easeOut });
                 with(GAME.Scene2) {
                     hit.width = sw;
                     hit.height = sh;
@@ -56,6 +57,15 @@ var Scene2JS = (function() {
                     copy2.scale.x = copy2.scale.y = CONFIG.my_ratio;
                     copy2.position.x = (sw - copy2.width) / 2;
                     copy2.position.y = (sh - copy2.height + logo.height) / 2;
+                }
+                if (!Scene2JS.hasResized) {
+                    Scene2JS.hasResized = true;
+                    setTimeout(function() {
+                        Scene2JS.resize(sw, sh);
+                    }, 50);
+                } else {
+                    Scene2JS.hasResized = false;
+                    TweenMax.to(GAME.Scene2, .3, { alpha: 1, ease: Sine.easeOut });
                 }
             }
         }

@@ -83,6 +83,7 @@ var CommonJS = (function() {
             });
         },
         showMessagePopup: function(header, body, footer) {
+            console.log("showMessagePopup")
             var popup = $('#message-pop');
             var popHeader = $('#message-pop .pop-header');
             var popBody = $('#message-pop .pop-body');

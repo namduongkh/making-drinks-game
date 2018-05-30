@@ -6711,6 +6711,7 @@ var CommonJS = (function() {
             });
         },
         showMessagePopup: function(header, body, footer) {
+            console.log("showMessagePopup")
             var popup = $('#message-pop');
             var popHeader = $('#message-pop .pop-header');
             var popBody = $('#message-pop .pop-body');
@@ -6765,7 +6766,7 @@ var CONFIG = {
     max_difficult_level: 5,
     appear_circle: 6,
     circle_scale_seconds: 10,
-    total_seconds: 60,
+    total_seconds: 30,
     my_ratio: 1,
     total_item_on_circle: 12,
     multiplier_with_difficult: 1.5,
@@ -6833,7 +6834,7 @@ function init() {
     // Scene3JS.create();
 
     $(window).resize(onResize);
-    // onResize();
+    onResize();
 
     startLoadAssets();
 
@@ -6852,8 +6853,8 @@ function onResize() {
 
     if (CONFIG.my_ratio > 2) CONFIG.my_ratio = 2;
 
-    $('#canvasHolder canvas').width = CONFIG.sw;
-    $('#canvasHolder canvas').height = CONFIG.sh;
+    $('#canvasHolder canvas').width(CONFIG.sw);
+    $('#canvasHolder canvas').height(CONFIG.sh);
 
     Scene0JS.resize(CONFIG.sw, CONFIG.sh);
     Scene1JS.resize(CONFIG.sw, CONFIG.sh);
@@ -6876,7 +6877,10 @@ function animationIn() {
     TweenMax.to(GAME.Container, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
     TweenMax.to(GAME.BubbleBG, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
 
-    gotoScene(Scene3JS);
+    // Điểm bắt đầu chạy các bối cảnh trong game
+    setTimeout(() => {
+        gotoScene(Scene3JS);
+    }, 500);
     // Scene3JS.start();
     // Scene0JS.start();
 }
@@ -6990,8 +6994,8 @@ function gotoScene(sceneJS) {
             // }
             sceneJS.create();
             sceneJS.start();
-            onResize();
             GAME.currentScene = sceneJS.id;
+            onResize();
         }
     });
 }
@@ -24157,6 +24161,14 @@ PIXI.MovieClip.prototype.setProperties =
         if (obj.height != undefined) {
             target.height = obj.height;
         }
+
+        if (obj.anchorX != undefined) {
+            target.anchor.x = obj.anchorX;
+        }
+
+        if (obj.anchorY != undefined) {
+            target.anchor.y = obj.anchorY;
+        }
     }
 
 PIXI.Sprite.prototype.addCircle =
@@ -24387,6 +24399,24 @@ var Scene0JS = (function() {
                     addObject({ id: "logo", texture: TEXTURES["images/logo.png"], scaleX: .5, scaleY: .5 });
                     // addObject({ id: "copy1", texture: TEXTURES["images/copy1.png"], scaleX: .5, scaleY: .5 })
                     addObject({ id: "copy1", texture: TEXTURES["images/intro_copy.png"], scaleX: .5, scaleY: .5 });
+                    addContainer({ id: "collectHolder" });
+
+                    with(collectHolder) {
+                        var collectObject = {};
+                        var index = 0;
+                        for (var i in GAME.material_collected) {
+                            // var rootX = (60 * index);
+                            // var rootY = 6;
+                            // collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "bold 18px Arial", color: "#008d41", locationX: rootX + 27, locationY: rootY });
+                            // addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "bold 18px Arial", color: "#008d41", locationX: rootX + 40, locationY: rootY });
+                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], scaleX: .5, scaleY: .5, regPerX: .5, regPerY: .5, locationX: ((index - 1) * -135) });
+                            addText({ id: "quantity", text: "x" + MATERIAL_INPUT[i].quantity, anchorX: .5, anchorY: .5, font: "22px Arial", color: "#008d41", locationX: ((index - 1) * -135), locationY: 60 });
+
+                            index++;
+                        }
+
+                        collectHolder.collectObject = collectObject;
+                    }
                 }
             }
         },
@@ -24405,7 +24435,11 @@ var Scene0JS = (function() {
                     logo.position.y = 10;
 
                     copy1.position.x = (sw - copy1.width) / 2;
-                    copy1.position.y = (sh - copy1.height + logo.height) / 2;
+                    copy1.position.y = (sh) / 3;
+
+                    // Phần intro cách chơi game
+                    collectHolder.position.x = (sw) / 2;
+                    collectHolder.position.y = (sh) / 2;
                 }
             }
         },
@@ -24419,7 +24453,7 @@ var Scene0JS = (function() {
 
             timeout = setTimeout(function() {
                 gotoScene(Scene1JS);
-            }, 3000)
+            }, 5000)
         }
     };
 })();
@@ -24847,13 +24881,13 @@ var Scene1JS = (function() {
     }
 
     function setProgressBar(per, dur) {
-        var progress_bar = GAME.Scene1.progressHoder.progress_bar;
+        // var progress_bar = GAME.Scene1.progressHoder.progress_bar;
 
-        if (per < 0) per = 0;
-        if (per > 1) per = 1;
+        // if (per < 0) per = 0;
+        // if (per > 1) per = 1;
 
-        if (dur == undefined) dur = .3;
-        TweenMax.to(progress_bar.scale, dur, { x: per, ease: Sine.easeOut });
+        // if (dur == undefined) dur = .3;
+        // TweenMax.to(progress_bar.scale, dur, { x: per, ease: Sine.easeOut });
     }
 
     /**
@@ -25025,10 +25059,10 @@ var Scene1JS = (function() {
                     }
 
                     with(progressHoder) {
-                        addObject({ id: "progress_bg", texture: TEXTURES["images/progress_bg.png"], scaleX: .5, scaleY: .5 });
-                        addObject({ id: "progress_bar", texture: TEXTURES["images/progress_bar.png"], scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
-                        addObject({ id: "num", texture: TEXTURES["images/numOfFrut.png"], scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
-                        addObject({ id: "bottle", texture: TEXTURES["images/bottle_double.png"], scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
+                        // addObject({ id: "progress_bg", texture: TEXTURES["images/progress_bg.png"], scaleX: .5, scaleY: .5 });
+                        // addObject({ id: "progress_bar", texture: TEXTURES["images/progress_bar.png"], scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
+                        // addObject({ id: "num", texture: TEXTURES["images/numOfFrut.png"], scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
+                        // addObject({ id: "bottle", texture: TEXTURES["images/bottle_double.png"], scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
                     }
 
 
@@ -25067,11 +25101,11 @@ var Scene1JS = (function() {
                         var collectObject = {};
                         var index = 0;
                         for (var i in GAME.material_collected) {
-                            var rootX = (60 * index);
-                            var rootY = 6;
-                            collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "bold 18px Arial", color: "#008d41", locationX: rootX + 27, locationY: rootY });
-                            addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "bold 18px Arial", color: "#008d41", locationX: rootX + 40, locationY: rootY });
-                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], width: 25, height: 25, locationX: rootX });
+                            var rootX = (60 * (index - 1) - 30);
+                            var rootY = 3;
+                            collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "18px Arial", color: "#008d41", locationX: rootX + 25, locationY: rootY, anchorX: .5, anchorY: .5 });
+                            addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "18px Arial", color: "#008d41", locationX: rootX + 38, locationY: rootY, anchorX: .5, anchorY: .5 });
+                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], width: 25, height: 25, locationX: rootX, regPerX: .5, regPerY: .5 });
                             index++;
                         }
 
@@ -25096,14 +25130,15 @@ var Scene1JS = (function() {
 
                     progressHoder.position.y = sh / 2 - 60;
 
-                    collectHolder.position.x = -sw / 2 + 20;
+                    collectHolder.position.x = 0;
                     collectHolder.position.y = sh / 2 - 50;
                 }
             }
         },
         start: function() {
-            trace("isAllowWin = " + isAllowWin);
-            haveAPrize = isAllowWin;
+            // trace("isAllowWin = " + isAllowWin);
+            // haveAPrize = isAllowWin;
+            GAME.is_stop = false;
 
             TweenMax.to(GAME.Scene1, .5, { alpha: 1, ease: Sine.easeOut })
             setProgressBar(0, 0);
@@ -25184,10 +25219,11 @@ var Scene2JS = (function() {
 
             timeout = setTimeout(function() {
                 gotoScene(Scene3JS);
-            }, 3000);
+            }, 4000);
         },
         resize: function(sw, sh) {
             if (GAME.Scene2) {
+                TweenMax.to(GAME.Scene2, 0, { alpha: 0.05, ease: Sine.easeOut });
                 with(GAME.Scene2) {
                     hit.width = sw;
                     hit.height = sh;
@@ -25203,6 +25239,15 @@ var Scene2JS = (function() {
                     copy2.scale.x = copy2.scale.y = CONFIG.my_ratio;
                     copy2.position.x = (sw - copy2.width) / 2;
                     copy2.position.y = (sh - copy2.height + logo.height) / 2;
+                }
+                if (!Scene2JS.hasResized) {
+                    Scene2JS.hasResized = true;
+                    setTimeout(function() {
+                        Scene2JS.resize(sw, sh);
+                    }, 50);
+                } else {
+                    Scene2JS.hasResized = false;
+                    TweenMax.to(GAME.Scene2, .3, { alpha: 1, ease: Sine.easeOut });
                 }
             }
         }
@@ -25225,6 +25270,7 @@ var Scene3JS = (function() {
                     addObject({ id: "bg", texture: TEXTURES["images/lastScence_bg.png"], scaleX: .5, scaleY: .5 })
 
                     addContainer({ id: "frutHolder" });
+                    addContainer({ id: "navigateHolder" });
                     addObject({ id: "lastScence", texture: TEXTURES["images/lastScence.png"], scaleX: .5, scaleY: .5 })
 
                     with(frutHolder) {
@@ -25236,9 +25282,15 @@ var Scene3JS = (function() {
                         addObject({ id: "f3", texture: TEXTURES["images/f3.png"], scaleX: .5, scaleY: .5, locationX: -115, locationY: 225, x: -10, y: -35 });
                     }
 
+                    with(navigateHolder) {
+                        addText({ id: "login", text: "Đăng nhập", font: "bold 17px Arial", color: "#008d41", locationX: -400, locationY: 0 });
+                        addText({ id: "help", text: "Hướng dẫn", font: "bold 17px Arial", color: "#008d41", locationX: -250, locationY: 0 });
+                        addText({ id: "award", text: "Đổi quà", font: "bold 17px Arial", color: "#008d41", locationX: -100, locationY: 0 });
+                    }
+
                     addObject({ id: "logo", texture: TEXTURES["images/logo.png"], scaleX: .5, scaleY: .5 })
                     addObject({ id: "goNowBtn", texture: TEXTURES["images/goNowBtn.png"], scaleX: .5, scaleY: .5 })
-                    addObject({ id: "connectWifiBtn", texture: TEXTURES["images/connectWifiBtn.png"], scaleX: .5, scaleY: .5 })
+                        // addObject({ id: "connectWifiBtn", texture: TEXTURES["images/connectWifiBtn.png"], scaleX: .5, scaleY: .5 })
 
                     addObject({ id: "myCodeHolder", texture: TEXTURES["images/codeBG.png"], scaleX: .6, scaleY: .6, visible: false })
                     myCodeHolder.addText({ id: "code", text: "ABC", font: "bold 17px Arial", color: "#008d41", locationX: 65, locationY: 12 });
@@ -25260,22 +25312,21 @@ var Scene3JS = (function() {
 
                 goNowBtn.mouseup = goNowBtn.mouseupoutside = goNowBtn.touchend = goNowBtn.touchendoutside = function(data) {
                     this.alpha = 1;
-                    // connectToWifi();
-                    location.reload();
-                }
-
-                connectWifiBtn.interactive = true;
-                connectWifiBtn.buttonMode = true;
-                connectWifiBtn.mousedown = connectWifiBtn.touchstart = function(data) {
-                    trace("ket noi wifi");
-                    // connectToWifi();
-                    this.alpha = .5;
-                }
-
-                connectWifiBtn.mouseup = connectWifiBtn.mouseupoutside = connectWifiBtn.touchend = connectWifiBtn.touchendoutside = function(data) {
-                    this.alpha = 1;
                     gotoScene(Scene0JS);
                 }
+
+                // connectWifiBtn.interactive = true;
+                // connectWifiBtn.buttonMode = true;
+                // connectWifiBtn.mousedown = connectWifiBtn.touchstart = function(data) {
+                //     trace("ket noi wifi");
+                //     // connectToWifi();
+                //     this.alpha = .5;
+                // }
+
+                // connectWifiBtn.mouseup = connectWifiBtn.mouseupoutside = connectWifiBtn.touchend = connectWifiBtn.touchendoutside = function(data) {
+                //     this.alpha = 1;
+                //     gotoScene(Scene0JS);
+                // }
 
                 TweenMax.to(lastScence, 1.5, {
                     delay: Math.random(),
@@ -25296,11 +25347,30 @@ var Scene3JS = (function() {
                     TweenMax.to(f3, 1.5, { delay: Math.random(), rotation: rota, y: f3.initY + 8, yoyo: true, repeat: -1, ease: Sine.easeInOut });
                 }
 
-
-                if (GAME.is_win) {
-                    myCodeHolder.visible = true;
-                    myCodeHolder.code.setText(CONFIG.my_code);
+                with(navigateHolder) {
+                    help.interactive = login.interactive = award.interactive = true;
+                    help.buttonMode = login.buttonMode = award.buttonMode = true;
+                    help.mousedown = help.touchend = login.mousedown = login.touchend = award.mousedown = award.touchend = function() {
+                        this.alpha = .5;
+                    }
+                    help.mouseup = help.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Hướng dẫn", "Nội dung hướng dẫn ở đây!");
+                    }
+                    login.mouseup = login.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Đăng nhập", "Nội dung đăng nhập ở đây!");
+                    }
+                    award.mouseup = award.touchend = function() {
+                        this.alpha = 1;
+                        CommonJS.showMessagePopup("Đổi quà", "Nội dung đổi quà ở đây!");
+                    }
                 }
+
+                // if (GAME.is_win) {
+                //     myCodeHolder.visible = true;
+                //     myCodeHolder.code.setText(CONFIG.my_code);
+                // }
             }
         },
         resize: function(sw, sh) {
@@ -25324,13 +25394,18 @@ var Scene3JS = (function() {
                     goNowBtn.position.x = (sw - goNowBtn.width) / 2;
                     goNowBtn.position.y = sh - 95 * CONFIG.my_ratio;
 
-                    connectWifiBtn.scale.y = connectWifiBtn.scale.x = CONFIG.my_ratio;
-                    connectWifiBtn.position.x = (sw - connectWifiBtn.width) / 2;
-                    connectWifiBtn.position.y = sh - 47 * CONFIG.my_ratio;
+                    // connectWifiBtn.scale.y = connectWifiBtn.scale.x = CONFIG.my_ratio;
+                    // connectWifiBtn.position.x = (sw - connectWifiBtn.width) / 2;
+                    // connectWifiBtn.position.y = sh - 47 * CONFIG.my_ratio;
 
                     myCodeHolder.scale.y = myCodeHolder.scale.x = CONFIG.my_ratio;
                     myCodeHolder.position.x = (sw - 160 * CONFIG.my_ratio) / 2;
                     myCodeHolder.position.y = sh - 160 * CONFIG.my_ratio;
+
+                    // Vùng chứa các nút để bật popup
+                    navigateHolder.position.x = sw - 20;
+                    navigateHolder.position.y = 20;
+
                 }
             }
         }

@@ -20,7 +20,7 @@ function init() {
     // Scene3JS.create();
 
     $(window).resize(onResize);
-    // onResize();
+    onResize();
 
     startLoadAssets();
 
@@ -39,8 +39,8 @@ function onResize() {
 
     if (CONFIG.my_ratio > 2) CONFIG.my_ratio = 2;
 
-    $('#canvasHolder canvas').width = CONFIG.sw;
-    $('#canvasHolder canvas').height = CONFIG.sh;
+    $('#canvasHolder canvas').width(CONFIG.sw);
+    $('#canvasHolder canvas').height(CONFIG.sh);
 
     Scene0JS.resize(CONFIG.sw, CONFIG.sh);
     Scene1JS.resize(CONFIG.sw, CONFIG.sh);
@@ -63,7 +63,10 @@ function animationIn() {
     TweenMax.to(GAME.Container, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
     TweenMax.to(GAME.BubbleBG, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
 
-    gotoScene(Scene3JS);
+    // Điểm bắt đầu chạy các bối cảnh trong game
+    setTimeout(() => {
+        gotoScene(Scene3JS);
+    }, 500);
     // Scene3JS.start();
     // Scene0JS.start();
 }
@@ -177,8 +180,8 @@ function gotoScene(sceneJS) {
             // }
             sceneJS.create();
             sceneJS.start();
-            onResize();
             GAME.currentScene = sceneJS.id;
+            onResize();
         }
     });
 }

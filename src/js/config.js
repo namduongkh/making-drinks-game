@@ -38,7 +38,7 @@ var CONFIG = {
     max_difficult_level: 5,
     appear_circle: 6,
     circle_scale_seconds: 10,
-    total_seconds: 60,
+    total_seconds: 30,
     my_ratio: 1,
     total_item_on_circle: 12,
     multiplier_with_difficult: 1.5,
