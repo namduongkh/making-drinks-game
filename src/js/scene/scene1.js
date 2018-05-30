@@ -32,7 +32,7 @@ var Scene1JS = (function() {
         var inputs = [];
         for (var i in MATERIAL_INPUT) {
             inputs.push(MATERIAL_INPUT[i]);
-            breakArr[MATERIAL_INPUT[i].id] = frutHolder.addObject({ id: MATERIAL_INPUT[i].broken_id, url: MATERIAL_INPUT[i].broken_url, visible: false });
+            breakArr[MATERIAL_INPUT[i].id] = frutHolder.addObject({ id: MATERIAL_INPUT[i].broken_id, texture: TEXTURES[MATERIAL_INPUT[i].broken_url], visible: false });
         }
 
         // Ngẫu nhiên chọn 1 loại nguyên liệu để giới hạn số lượng
@@ -439,11 +439,7 @@ var Scene1JS = (function() {
         GAME.stop_countdown = true;
         GAME.is_stop = true;
 
-        // if (!haveAPrize) gotoSence(GAME.Scene1, GAME.Scene2);
-        // else {
-        //     haveAPrize = false;
-        gotoSence(GAME.Scene1, GAME.Scene2);
-        // }
+        gotoScene(Scene2JS);
     }
 
     /**
@@ -574,11 +570,12 @@ var Scene1JS = (function() {
     }
 
     return {
+        id: "s1",
         create: function() {
             trace("create 1")
             with(GAME.Container) {
 
-                GAME.Scene1 = addContainer({ id: "s1", locationX: CONFIG.sw / 2, locationY: CONFIG.sh / 2, alpha: 0 });
+                GAME.Scene1 = addContainer({ id: Scene1JS.id, locationX: CONFIG.sw / 2, locationY: CONFIG.sh / 2, alpha: 0 });
 
                 with(GAME.Scene1) {
                     addRect("hit", CONFIG.sw, CONFIG.sh, "0xff0", 0, 0, 0);
@@ -590,23 +587,23 @@ var Scene1JS = (function() {
                     // addContainer({ id: "intro" });
                     addContainer({ id: "collectHolder" });
 
-                    addObject({ id: "small_bubble_group", url: "images/bubble_group.png", visible: false });
+                    addObject({ id: "small_bubble_group", texture: TEXTURES["images/bubble_group.png"], visible: false });
 
                     // with(intro) {
-                    //     addObject({ id: "copy", url: "images/intro_copy.png", scaleX: .5, scaleY: .5, locationX: -155, locationY: -20 })
+                    //     addObject({ id: "copy", texture: TEXTURES["images/intro_copy.png"], scaleX: .5, scaleY: .5, locationX: -155, locationY: -20 })
                     // }
 
                     with(countDown) {
-                        addObject({ id: "bg", url: "images/countDown.png", scaleX: .5, scaleY: .5 });
+                        addObject({ id: "bg", texture: TEXTURES["images/countDown.png"], scaleX: .5, scaleY: .5 });
                         addText({ id: "txt", text: CONFIG.total_seconds, font: "bold 20px Arial", color: "#008d41", locationX: 130, locationY: 15 });
                         addText({ id: "s", text: "s", font: "bold 15px Arial", color: "#008d41", locationX: 129, locationY: 19 });
                     }
 
                     with(progressHoder) {
-                        addObject({ id: "progress_bg", url: "images/progress_bg.png", scaleX: .5, scaleY: .5 });
-                        addObject({ id: "progress_bar", url: "images/progress_bar.png", scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
-                        addObject({ id: "num", url: "images/numOfFrut.png", scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
-                        addObject({ id: "bottle", url: "images/bottle_double.png", scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
+                        addObject({ id: "progress_bg", texture: TEXTURES["images/progress_bg.png"], scaleX: .5, scaleY: .5 });
+                        addObject({ id: "progress_bar", texture: TEXTURES["images/progress_bar.png"], scaleX: .5, scaleY: .5, locationX: 3, locationY: 3 });
+                        addObject({ id: "num", texture: TEXTURES["images/numOfFrut.png"], scaleX: .5, scaleY: .5, locationX: 7, locationY: 7 });
+                        addObject({ id: "bottle", texture: TEXTURES["images/bottle_double.png"], scaleX: .5, scaleY: .5, locationX: 80, locationY: -37 });
                     }
 
 
@@ -634,7 +631,7 @@ var Scene1JS = (function() {
                         var bubbleArr = [];
 
                         // Thêm ly tocotoco vào giữa màn hình chơi game
-                        var bubbleItem = addObject({ id: "tocotocoCup", regPerX: .5, regPerY: .5, url: "images/bubble.png", scaleX: .5, scaleY: .5 });
+                        var bubbleItem = addObject({ id: "tocotocoCup", regPerX: .5, regPerY: .5, texture: TEXTURES["images/bubble.png"], scaleX: .5, scaleY: .5 });
                         bubbleArr.push(bubbleItem);
                         randomFn(bubbleItem, true);
 
@@ -649,7 +646,7 @@ var Scene1JS = (function() {
                             var rootY = 6;
                             collectObject[i] = addText({ id: "count", text: GAME.material_collected[i], font: "bold 18px Arial", color: "#008d41", locationX: rootX + 27, locationY: rootY });
                             addText({ id: "quantity", text: "/" + MATERIAL_INPUT[i].quantity, font: "bold 18px Arial", color: "#008d41", locationX: rootX + 40, locationY: rootY });
-                            addObject({ id: "image", url: MATERIAL_INPUT[i].url, width: 25, height: 25, locationX: rootX });
+                            addObject({ id: "image", texture: TEXTURES[MATERIAL_INPUT[i].url], width: 25, height: 25, locationX: rootX });
                             index++;
                         }
 
@@ -659,22 +656,24 @@ var Scene1JS = (function() {
             }
         },
         resize: function(sw, sh) {
-            with(GAME.Scene1) {
-                hit.width = sw;
-                hit.height = sh;
-                hit.position.x = -hit.width / 2;
-                hit.position.y = -hit.height / 2;
+            if (GAME.Scene1) {
+                with(GAME.Scene1) {
+                    hit.width = sw;
+                    hit.height = sh;
+                    hit.position.x = -hit.width / 2;
+                    hit.position.y = -hit.height / 2;
 
-                position.x = sw / 2;
-                position.y = sh / 2;
+                    position.x = sw / 2;
+                    position.y = sh / 2;
 
-                countDown.position.x = -80;
-                countDown.position.y = -sh / 2 + 5;
+                    countDown.position.x = -80;
+                    countDown.position.y = -sh / 2 + 5;
 
-                progressHoder.position.y = sh / 2 - 60;
+                    progressHoder.position.y = sh / 2 - 60;
 
-                collectHolder.position.x = -sw / 2 + 20;
-                collectHolder.position.y = sh / 2 - 50;
+                    collectHolder.position.x = -sw / 2 + 20;
+                    collectHolder.position.y = sh / 2 - 50;
+                }
             }
         },
         start: function() {

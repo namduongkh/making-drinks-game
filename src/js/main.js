@@ -9,17 +9,18 @@ function init() {
     GAME.Renderer = PIXI.autoDetectRenderer(CONFIG.sw, CONFIG.sh, { transparent: true });
     document.getElementById('canvasHolder').appendChild(GAME.Renderer.view);
 
+    loadTextures();
+
     createBubbleBG(); // Add tini bubble
     GAME.Container = GAME.Stage.addContainer({ id: "container", alpha: 0 });
 
-    Scene0JS.create();
-    Scene1JS.create();
-    Scene2JS.create();
-    Scene3JS.create();
-
+    // Scene0JS.create();
+    // Scene1JS.create();
+    // Scene2JS.create();
+    // Scene3JS.create();
 
     $(window).resize(onResize);
-    onResize();
+    // onResize();
 
     startLoadAssets();
 
@@ -62,7 +63,7 @@ function animationIn() {
     TweenMax.to(GAME.Container, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
     TweenMax.to(GAME.BubbleBG, dur, { delay: delay, alpha: 1, ease: Sine.easeOut });
 
-    gotoSence(GAME.Scene0, GAME.Scene3);
+    gotoScene(Scene3JS);
     // Scene3JS.start();
     // Scene0JS.start();
 }
@@ -74,7 +75,7 @@ function createBubbleBG() {
     var itemArr = [];
     with(GAME.BubbleBG) {
         for (var i = 0; i < 20; i++) {
-            var item = addObject({ id: "item" + i, url: "images/tini_bubble.png" })
+            var item = addObject({ id: "item" + i, texture: TEXTURES["images/tini_bubble.png"] })
             addChild(item);
             itemArr.push(item);
             randomBubbleBG(item, true);
@@ -134,48 +135,68 @@ function randomBubbleBG(item, flag) {
  * @param {*} curSence 
  * @param {*} target 
  */
-function gotoSence(curSence, target) {
+function gotoScene(sceneJS) {
+    if (!sceneJS) return;
     TweenMax.to(GAME.Container, .3, {
         alpha: 0,
         ease: Sine.easeOut,
         onComplete: function() {
-            GAME.Container.removeChild(curSence);
+            if (GAME.currentScene) {
+                var currentScene;
+                switch (GAME.currentScene) {
+                    case "s0":
+                        currentScene = GAME.Scene0;
+                        break;
+                    case "s1":
+                        currentScene = GAME.Scene1;
+                        break;
+                    case "s2":
+                        currentScene = GAME.Scene2;
+                        break;
+                    case "s3":
+                        currentScene = GAME.Scene3;
+                        break;
+                }
+                GAME.Container.removeChild(currentScene);
+            }
             TweenMax.to(GAME.Container, .3, { alpha: 1, ease: Sine.easeOut });
 
-            switch (target.id) {
-                case "s1":
-                    Scene1JS.start();
-                    break;
-                case "s2":
-                    Scene2JS.start();
-                    break;
-                case "s3":
-                    Scene3JS.start();
-                    break;
-            }
+            // switch (target.id) {
+            //     case "s0":
+            //         sceneJS = Scene0JS;
+            //         break;
+            //     case "s1":
+            //         sceneJS = Scene1JS;
+            //         break;
+            //     case "s2":
+            //         sceneJS = Scene2JS;
+            //         break;
+            //     case "s3":
+            //         sceneJS = Scene3JS;
+            //         break;
+            // }
+            sceneJS.create();
+            sceneJS.start();
+            onResize();
+            GAME.currentScene = sceneJS.id;
         }
-    })
-}
-
-function setCode(code) {
-    CONFIG.my_code = code;
-    GAME.is_win = true;
-
-    if (CONFIG.my_code == "") {
-        haveAPrize = false;
-    }
-
-    //
-    var txt = GAME.Scene2.copy2.addText({ id: "code", text: code, font: "bold 25px Arial", color: "#008d41", locationX: 90, locationY: 310 });
-    txt.position.x = 90 + (130 - txt.width) / 2;
-
-    gotoSence(GAME.Scene1, GAME.Scene2);
+    });
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 function addToQueue(url) {
     // trace(url);
     GAME.AssetsLoader.push(url);
+}
+
+/**
+ * Load tất cả các image file để chuyển thành texture
+ */
+function loadTextures() {
+    for (var i in TEXTURES) {
+        addToQueue(TEXTURES[i]);
+        TEXTURES[i] = new PIXI.Texture.fromImage(TEXTURES[i]);
+    }
 }
 
 function startLoadAssets() {

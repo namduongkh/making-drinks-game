@@ -47,11 +47,44 @@ PIXI.Sprite.prototype.addSprite =
 
     }
 
+PIXI.Sprite.prototype.setTexture =
+    PIXI.MovieClip.prototype.setTexture =
+    PIXI.DisplayObjectContainer.prototype.setTexture = function(id, texture, startDrag) {
+
+
+        // var texture = new PIXI.Texture.fromImage(url);
+        var target = new PIXI.Sprite(texture);
+
+        // addToQueue(url);
+
+        this.addChild(target);
+        this[id] = target;
+
+        if (startDrag == true) target.startDrag(true);
+
+        target.id = id;
+        return target;
+
+    }
+
 PIXI.Sprite.prototype.updateSprite =
     PIXI.MovieClip.prototype.updateSprite =
     PIXI.DisplayObjectContainer.prototype.updateSprite = function(id, url) {
 
         var texture = new PIXI.Texture.fromImage(url);
+        this.sprite.setTexture(texture);
+        // var target = new PIXI.Sprite(appleTexture);
+        // this.addChild(target);
+        // console.log('sprite', this);
+        this.id = id;
+        return this;
+    }
+
+PIXI.Sprite.prototype.updateTexture =
+    PIXI.MovieClip.prototype.updateTexture =
+    PIXI.DisplayObjectContainer.prototype.updateTexture = function(id, texture) {
+
+        // var texture = new PIXI.Texture.fromImage(url);
         this.sprite.setTexture(texture);
         // var target = new PIXI.Sprite(appleTexture);
         // this.addChild(target);
@@ -84,8 +117,12 @@ PIXI.MovieClip.prototype.addObject =
         target.id = obj.id;
         this.addChild(target)
 
-        if (obj.url != "") {
+        if (typeof obj.url != 'undefined') {
             target.sprite = target.addSprite('bitmap', obj.url);
+        }
+
+        if (typeof obj.texture != 'undefined') {
+            target.sprite = target.setTexture('bitmap', obj.texture);
         }
 
         target.setProperties(obj);
@@ -104,6 +141,10 @@ PIXI.MovieClip.prototype.updateObject =
         // console.log("this", this);
         if (obj.url != "") {
             target.updateSprite(obj.id, obj.url);
+        }
+
+        if (obj.texture) {
+            target.sprite = target.updateTexture(obj.id, obj.texture);
         }
 
         target.setProperties(obj);
